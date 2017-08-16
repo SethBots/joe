@@ -12,16 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static net.swvn9.joe.Bot.jda;
 
-public class masterConfig {
+public class commandChannel {
     public static Map<String,Command> list = new HashMap<>();
-    //All loaded commands are here
     private static Map<String,Class> classes = new HashMap<>();
 
     public static void pull(String s){
@@ -94,5 +91,4 @@ public class masterConfig {
     public static String show(){
         return "Commands: "+classes.keySet();
     }
-
 }

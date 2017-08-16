@@ -7,7 +7,6 @@ import net.dv8tion.jda.core.events.message.MessageDeleteEvent;
 import net.dv8tion.jda.core.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.awt.*;
@@ -17,13 +16,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-import static net.swvn9.joe.Config.dirlist;
-
 public class Listener extends ListenerAdapter{
 
     @Override
     public void onReady(ReadyEvent e){
-        masterConfig.pull("command");
+        commandChannel.pull("command");
         //System.out.println("Session commands loaded.");
     }
 
@@ -32,7 +29,7 @@ public class Listener extends ListenerAdapter{
     public void onGenericMessage(GenericMessageEvent e){
         if(e instanceof MessageUpdateEvent || e instanceof MessageDeleteEvent || e instanceof MessageReceivedEvent)
         if(e.getChannel().getId().equals("341669410827796500")){
-            masterConfig.pull("command");
+            commandChannel.pull("command");
             //System.out.println("Session commands reloaded due to new message/edit/delete");
         }
     }
@@ -71,9 +68,9 @@ public class Listener extends ListenerAdapter{
                             if(delete) e.getMessage().delete().queue();
                         }
                         return;
-                    case "c":
+                    case "h":
                         try{
-                            masterConfig.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal+"c ","").split(" ")[0]).run(e);
+                            commandChannel.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal+"h ","").split(" ")[0]).run(e);
                             if(delete) e.getMessage().delete().queue();
                         } catch (Exception ex){
                             if (!(ex instanceof NullPointerException)) {
@@ -151,7 +148,7 @@ public class Listener extends ListenerAdapter{
             }
             //Runtime Commands
             try{
-                Commands.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal,"")).run(e);
+                commandChannel.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal,"").split(" ")[0]).run(e);
                 if(delete) e.getMessage().delete().queue();
             } catch (Exception ex){
                 if (!(ex instanceof NullPointerException)) {

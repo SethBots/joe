@@ -17,8 +17,7 @@ public class Bot {
     private static File dir2 = new File("commands"+File.separator);
 
     public static void main(String[] args){
-        t.start();
-
+        //t.start();
         if(!dir.exists()) dir.mkdir();
         if(!dir2.exists()) dir2.mkdir();
         Commands.load();

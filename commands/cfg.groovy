@@ -1,6 +1,6 @@
 import net.swvn9.joe.Command
 import net.swvn9.joe.*
-import net.swvn9.joe.masterConfig
+import net.swvn9.joe.configChannel
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -23,6 +23,6 @@ class cfg extends Command {
                     m.getContentRaw()+"\n\n"
             ).queue()*/
         }
-        masterConfig.pull("command")
+        configChannel.pull("command")
     }
 }
