@@ -1,6 +1,6 @@
 package net.swvn9.joe;
 
-import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.GenericMessageEvent;
 import net.dv8tion.jda.core.events.message.MessageDeleteEvent;
@@ -8,12 +8,6 @@ import net.dv8tion.jda.core.events.message.MessageUpdateEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import java.util.List;
-import java.awt.*;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Listener extends ListenerAdapter{
@@ -21,6 +15,7 @@ public class Listener extends ListenerAdapter{
     @Override
     public void onReady(ReadyEvent e){
         commandChannel.pull("command");
+        configChannel.read();
         //System.out.println("Session commands loaded.");
     }
 
@@ -36,7 +31,21 @@ public class Listener extends ListenerAdapter{
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
-        if(e.getAuthor().isBot()) return;
+        if(e.getAuthor().isBot()||e.getChannel().getType().equals(ChannelType.PRIVATE)) return;
+
+        if(!configChannel.cfg.keySet().contains(e.getGuild().getId())){
+            if(null!=Bot.jda.getGuildById("341666084748787712").getMember(e.getAuthor())&&
+                    Bot.jda.getGuildById("341666084748787712").getMember(e.getAuthor()).getRoles().contains(Bot.jda.getRoleById("341705215969460224"))){
+                if(e.getMessage().getMentionedUsers().contains(Bot.jda.getSelfUser())&&e.getMessage().getContentRaw().toLowerCase().contains("config")){
+                    configChannel.putnew(e.getGuild().getId(),e.getGuild().getOwner().getUser().getId(),false);
+                    System.out.println("added new guild");
+                } else {
+                    return;
+                }
+            }
+        }
+
+        /*
         if(!Config.check(e.getGuild().getId())) {
             if(e.getMessage().getMentionedUsers().contains(Bot.jda.getSelfUser())&&
                     e.getMessage().getContentRaw().contains("config")&&
@@ -50,34 +59,16 @@ public class Listener extends ListenerAdapter{
         }
         String literal = Config.guildMap.get(e.getGuild().getId()).getLiteral();
         Boolean delete = Config.guildMap.get(e.getGuild().getId()).getDeleteInvoking();
+        */
+
+        String literal = "!";
+        Boolean delete = true;
 
         if(e.getMessage().getContentRaw().startsWith(literal)){
             //Hard-Coded Commands
             try{
                 switch (e.getMessage().getContentRaw().toLowerCase().replaceFirst(literal,"").split(" ")[0]){
-                    case "reload":
-                        String s;
-                        if((s = e.getMessage().getContentRaw().toLowerCase().replaceFirst(literal,"").split(" ")[1])!=null){
-                            if((s = Commands.reload(s))!=null){
-                                e.getChannel().sendMessageFormat("%s.",s).queue(m->m.delete().queueAfter(1, TimeUnit.MINUTES));
-                            } else {
-                                Commands.reload();
-                                Config.reload();
-                                e.getChannel().sendMessageFormat("Reloaded all commands & guilds from file.").queue(m->m.delete().queueAfter(1, TimeUnit.MINUTES));
-                            }
-                            if(delete) e.getMessage().delete().queue();
-                        }
-                        return;
-                    case "h":
-                        try{
-                            commandChannel.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal+"h ","").split(" ")[0]).run(e);
-                            if(delete) e.getMessage().delete().queue();
-                        } catch (Exception ex){
-                            if (!(ex instanceof NullPointerException)) {
-                                e.getChannel().sendMessageFormat("```%s```",ex).queue(m->m.delete().queueAfter(10, TimeUnit.MINUTES));
-                            }                        }
-                        return;
-                    case "dump":
+                    /*case "dump":
                         for(String str:Config.guildMap.keySet()){
                             net.swvn9.joe.beans.Guild g=Config.guildMap.get(str);
                             Color guild = Color.decode("#2C2F33");
@@ -110,46 +101,13 @@ public class Listener extends ListenerAdapter{
                                     .build()
                             ).queue();
                         }
-                        return;
-                    case "g":
-                        String arguments[] = e.getMessage().getContentRaw().split(" ");
-                        if(arguments.length>1){
-                            if(arguments[1].equalsIgnoreCase("edit")){
-
-                                for(File f : Config.dirlist){
-                                    if(f.getName().equals(arguments[2]+".yml")){
-                                        if(arguments[3]!=null){
-                                            System.out.println("edit "+arguments[2]);
-                                            FileReader reader = new FileReader(f);
-                                            Scanner scan = new Scanner(reader);
-                                            StringBuilder lines = new StringBuilder();
-                                            List<String> config = new ArrayList<>();
-                                            while (scan.hasNextLine()) config.add(scan.nextLine());
-                                            String file[] = (String[]) config.toArray();
-                                        }
-                                    }
-                                }
-                            } else {
-                                for(File f : Config.dirlist){
-                                    if(f.getName().equals(arguments[1]+".yml")){
-                                        FileReader reader = new FileReader(f);
-                                        Scanner scan = new Scanner(reader);
-                                        StringBuilder lines = new StringBuilder();
-                                        while (scan.hasNextLine()) lines.append(scan.nextLine()).append("\n");
-                                        e.getChannel().sendMessageFormat("```yaml\n%s\n```",lines.toString()).queue();
-                                    }
-                                }
-                            }
-                        }
-                        return;
+                        return;*/
                 }
             } catch(Exception ignored){
                 return;
             }
-            //Runtime Commands
             try{
                 commandChannel.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal,"").split(" ")[0]).run(e);
-                if(delete) e.getMessage().delete().queue();
             } catch (Exception ex){
                 if (!(ex instanceof NullPointerException)) {
                     e.getChannel().sendMessageFormat("```%s```",ex).queue(m->m.delete().queueAfter(10, TimeUnit.MINUTES));
