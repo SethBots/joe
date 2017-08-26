@@ -1,17 +1,15 @@
 package net.swvn9.joe;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import jdk.nashorn.internal.parser.JSONParser;
 import net.dv8tion.jda.core.entities.Message;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@SuppressWarnings({"ALL", "CanBeFinal"})
 public class configChannel {
     public static Map<String,JSONObject> cfg = new HashMap<>();
     public static JSONObject defaultCfg = new JSONObject()

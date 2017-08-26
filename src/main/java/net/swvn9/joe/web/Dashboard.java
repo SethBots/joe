@@ -6,6 +6,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 import org.eclipse.jetty.server.handler.ResourceHandler;
 
+@SuppressWarnings("ALL")
 public class Dashboard {
     public static Thread t = new Thread(() -> {
         Server server = new Server(9001);

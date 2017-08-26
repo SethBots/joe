@@ -1,8 +1,6 @@
 package net.swvn9.joe;
 
-import com.mysql.cj.core.exceptions.ExceptionFactory;
 import groovy.lang.GroovyClassLoader;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageReaction;
 
@@ -17,6 +15,7 @@ import java.util.regex.Pattern;
 
 import static net.swvn9.joe.Bot.jda;
 
+@SuppressWarnings({"ALL", "CanBeFinal"})
 public class commandChannel {
     public static Map<String,Command> list = new HashMap<>();
     private static Map<String,Class> classes = new HashMap<>();

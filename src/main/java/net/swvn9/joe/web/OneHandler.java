@@ -1,8 +1,8 @@
 package net.swvn9.joe.web;
 
-import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.Server;
 
+@SuppressWarnings("ALL")
 public class OneHandler
 {
     public static void main( String[] args ) throws Exception

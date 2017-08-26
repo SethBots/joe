@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.Server;
 /**
  * The simplest possible Jetty server.
  */
+@SuppressWarnings("ALL")
 public class SimplestServer
 {
     public static void main( String[] args ) throws Exception

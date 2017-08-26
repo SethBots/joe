@@ -10,6 +10,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
  * Simple Jetty FileServer.
  * This is a simple example of Jetty configured as a FileServer.
  */
+@SuppressWarnings("ALL")
 public class FileServer
 {
     public static void main(String[] args) throws Exception
