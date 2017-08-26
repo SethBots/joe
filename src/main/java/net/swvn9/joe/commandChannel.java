@@ -24,14 +24,8 @@ public class commandChannel {
         list.clear();
         classes.clear();
         GroovyClassLoader gcl = new GroovyClassLoader();
-        String channelID;
-        switch(s){
-            default:
-                channelID = "0";
-                break;
-            case "command":
-                channelID = "341669410827796500";
-        }
+        String channelID = "341669410827796500";
+
         List<Message> commandMessages = new ArrayList<>();
         commandMessages.addAll(jda.getGuildById("341666084748787712").getTextChannelById(channelID).getIterableHistory().complete());
         Pattern classname = Pattern.compile("^```?(\\w*)|```$");
