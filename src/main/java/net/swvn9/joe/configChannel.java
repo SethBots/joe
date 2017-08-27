@@ -72,13 +72,16 @@ public class configChannel {
 
 
     public static void addRole(String guild,String role,String perm){
+        perm = perm.toLowerCase();
         JSONObject backup = cfg.get(guild);
         Boolean contains = false;
         for(Object j:cfg.get(guild).getJSONArray("roles")){
             JSONObject s = (JSONObject) j;
             if(s.get("roleId").equals(role)){
                 contains=true;
-                s.getJSONArray("allowed").put(perm);
+                if(!s.getJSONArray("allowed").toList().contains(perm)){
+                    s.getJSONArray("allowed").put(perm);
+                }
                 break;
             }
 
@@ -92,16 +95,19 @@ public class configChannel {
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
             if(m.getContentRaw().contains(guild)){
-                m.delete().queue();
+                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+                    if(("```json\n"+cfg.get(guild).toString(3)+"\n```").length()>1999){
+                        m.editMessage("```json\n"+backup.toString(3)+"\n```").queue();
+                        //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+backup.toString(3)+"\n```").queue();
+                        System.out.println("Config is too long");
+                    } else {
+                        //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                        m.editMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                    }
+                    //m.delete().queue();
+                }
                 break;
             }
-        }
-
-        if(("```json\n"+cfg.get(guild).toString(3)+"\n```").length()>1999){
-            Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+backup.toString(3)+"\n```").queue();
-            System.out.println("Config is too long");
-        } else {
-            Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
         }
     }
 
@@ -122,15 +128,18 @@ public class configChannel {
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
             if(m.getContentRaw().contains(guild)){
-                m.delete().queue();
+                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+                    //m.delete().queue();
+                    m.editMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                    //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                }
                 break;
             }
         }
-        Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
-
     }
 
     public static void removePerm(String guild,String role,String perm){
+        perm = perm.toLowerCase();
         JSONArray array;
         int u = 0;
         for(Object o:cfg.get(guild).getJSONArray("roles")){
@@ -146,7 +155,11 @@ public class configChannel {
                         cfg.get(guild).getJSONArray("roles").remove(u);
                         ob.remove("allowed");
                         ob.put("allowed",array);
-                        cfg.get(guild).getJSONArray("roles").put(ob);
+                        if(array.length()==0){
+                            removeRole(guild,role);
+                        } else {
+                            cfg.get(guild).getJSONArray("roles").put(ob);
+                        }
                     }
                     y++;
                     if(y>=array.length()) break;
@@ -161,11 +174,14 @@ public class configChannel {
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
             if(m.getContentRaw().contains(guild)){
-                m.delete().queue();
+                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+                    //m.delete().queue();
+                    //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                    m.editMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
+                }
                 break;
             }
         }
-        Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
     }
 
 }

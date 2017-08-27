@@ -21,6 +21,7 @@ public class Command {
         this.guild = event.getGuild();
         this.jda = event.getJDA();
         this.message = event.getMessage();
+        this.invoking = message.getContentRaw().split(" ")[0];
 
         if(!this.hasPermission())return;
         command();
@@ -31,6 +32,7 @@ public class Command {
     public Guild guild;
     public JDA jda;
     public Message message;
+    public String invoking;
 
     //meta crap
     public String node;
