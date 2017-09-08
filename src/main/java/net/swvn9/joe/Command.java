@@ -24,7 +24,10 @@ public class Command {
         this.invoking = message.getContentRaw().split(" ")[0];
 
         if(!this.hasPermission())return;
+
+        commandChannel.running.put(guild.getId(),this);
         command();
+        commandChannel.running.remove(guild.getId());
         message.delete().queue();
     }
 
@@ -47,6 +50,21 @@ public class Command {
 
         this.guildLimited = false;
         this.guilds.add("341666084748787712");
+    }
+
+    public void respond(String s){
+        channel.sendMessage(s).queue();
+    }
+
+    public boolean checkArg(String in,String expecting){
+        if(!expecting.toLowerCase().contains(new convert(in).type)){
+            String[] str = expecting.split(" ");
+            StringBuilder sb = new StringBuilder();
+            for(String s:str)
+                sb.append("`").append(s).append("` ");
+            respond(Bot.REDTICK+in+" does not convert to "+sb.toString());
+        }
+        return expecting.toLowerCase().contains(new convert(in).type);
     }
 
     public Boolean hasPermission(){
@@ -75,6 +93,6 @@ public class Command {
     }
 
     public void command(){
-        channel.sendMessageFormat("`This command exists, but has no content.`").queue();
+        channel.sendMessageFormat("`This command exists but has no content.`").queue();
     }
 }

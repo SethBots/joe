@@ -19,6 +19,8 @@ import static net.swvn9.joe.Bot.jda;
 public class commandChannel {
     public static Map<String,Command> list = new HashMap<>();
     private static Map<String,Class> classes = new HashMap<>();
+    public static List<String> nodes = new ArrayList<>();
+    public static Map<String,Command> running = new HashMap<>();
 
     public static void pull(String s){
         list.clear();
@@ -43,9 +45,13 @@ public class commandChannel {
                     if(classes.containsKey(toLoad.getName())){
                         classes.replace(toLoad.getName(),toLoad);
                         list.replace(toLoad.getName(),(Command) toLoad.newInstance());
+                        list.get(toLoad.getName()).meta();
+                        nodes.add(list.get(toLoad.getName()).node);
                     } else {
                         classes.put(toLoad.getName(),toLoad);
                         list.put(toLoad.getName(),(Command) toLoad.newInstance());
+                        list.get(toLoad.getName()).meta();
+                        nodes.add(list.get(toLoad.getName()).node);
                     }
                     for(MessageReaction mr:m.getReactions()){
                         if(mr.getEmote().getEmote().equals(jda.getEmoteById("338773212710305795"))){

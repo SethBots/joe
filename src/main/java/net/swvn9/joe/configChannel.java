@@ -72,6 +72,11 @@ public class configChannel {
 
 
     public static void addRole(String guild,String role,String perm){
+        if(!commandChannel.nodes.contains(perm.toLowerCase())){
+            if(commandChannel.running.containsKey(guild))
+                commandChannel.running.get(guild).respond(Bot.REDTICK+perm+" is not in the list of known permissions.");
+            return;
+        }
         perm = perm.toLowerCase();
         JSONObject backup = cfg.get(guild);
         Boolean contains = false;
@@ -109,6 +114,8 @@ public class configChannel {
                 break;
             }
         }
+        if(commandChannel.running.containsKey(guild))
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been added to ROLE `"+role+"` in GUILD `"+guild+"`");
     }
 
     public static void removeRole(String guild,String role){
@@ -136,6 +143,8 @@ public class configChannel {
                 break;
             }
         }
+        if(commandChannel.running.containsKey(guild))
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+" ROLE `"+role+"` in GUILD `"+guild+"` removed");
     }
 
     public static void removePerm(String guild,String role,String perm){
@@ -182,6 +191,8 @@ public class configChannel {
                 break;
             }
         }
+        if(commandChannel.running.containsKey(guild))
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been removed from ROLE `"+role+"` in GUILD `"+guild+"`");
     }
 
 }
