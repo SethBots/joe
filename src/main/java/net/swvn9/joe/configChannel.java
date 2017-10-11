@@ -62,8 +62,8 @@ public class configChannel {
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         cfg.clear();
         for(Message m:msgs){
-            if(m.getContentRaw().contains("```json")){
-                JSONObject hold = new JSONObject(m.getContentRaw().replaceAll("```(json)?",""));
+            if(m.getRawContent().contains("```json")){
+                JSONObject hold = new JSONObject(m.getRawContent().replaceAll("```(json)?",""));
                 cfg.put(hold.getString("guildId"),hold);
             }
         }
@@ -99,8 +99,8 @@ public class configChannel {
         }
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
-            if(m.getContentRaw().contains(guild)){
-                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+            if(m.getRawContent().contains(guild)){
+                if(!m.getRawContent().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
                     if(("```json\n"+cfg.get(guild).toString(3)+"\n```").length()>1999){
                         m.editMessage("```json\n"+backup.toString(3)+"\n```").queue();
                         //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+backup.toString(3)+"\n```").queue();
@@ -115,7 +115,7 @@ public class configChannel {
             }
         }
         if(commandChannel.running.containsKey(guild))
-            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been added to ROLE `"+role+"` in GUILD `"+guild+"`");
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been added to "+Bot.jda.getRoleById(role).getName()+" in "+Bot.jda.getGuildById(guild).getName());
     }
 
     public static void removeRole(String guild,String role){
@@ -134,8 +134,8 @@ public class configChannel {
 
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
-            if(m.getContentRaw().contains(guild)){
-                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+            if(m.getRawContent().contains(guild)){
+                if(!m.getRawContent().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
                     //m.delete().queue();
                     m.editMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
                     //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
@@ -144,7 +144,7 @@ public class configChannel {
             }
         }
         if(commandChannel.running.containsKey(guild))
-            commandChannel.running.get(guild).respond(Bot.GRNTICK+" ROLE `"+role+"` in GUILD `"+guild+"` removed");
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+""+Bot.jda.getRoleById(role).getName()+" permissions in "+Bot.jda.getGuildById(guild).getName()+" removed");
     }
 
     public static void removePerm(String guild,String role,String perm){
@@ -182,8 +182,8 @@ public class configChannel {
         }
         List<Message> msgs = Bot.jda.getTextChannelById("341668341108310016").getIterableHistory().complete().stream().filter(m->m.getAuthor().equals(Bot.jda.getSelfUser())||m.getAuthor().equals(Bot.jda.getUserById("269904635337113603"))).collect(Collectors.toList());
         for(Message m:msgs){
-            if(m.getContentRaw().contains(guild)){
-                if(!m.getContentRaw().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
+            if(m.getRawContent().contains(guild)){
+                if(!m.getRawContent().equals("```json\n"+cfg.get(guild).toString(3)+"\n```")){
                     //m.delete().queue();
                     //Bot.jda.getTextChannelById("341668341108310016").sendMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
                     m.editMessage("```json\n"+cfg.get(guild).toString(3)+"\n```").queue();
@@ -192,7 +192,7 @@ public class configChannel {
             }
         }
         if(commandChannel.running.containsKey(guild))
-            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been removed from ROLE `"+role+"` in GUILD `"+guild+"`");
+            commandChannel.running.get(guild).respond(Bot.GRNTICK+perm+" has been removed from "+Bot.jda.getRoleById(role).getName()+" in "+Bot.jda.getGuildById(guild).getName());
     }
 
 }

@@ -21,7 +21,7 @@ public class Command {
         this.guild = event.getGuild();
         this.jda = event.getJDA();
         this.message = event.getMessage();
-        this.invoking = message.getContentRaw().split(" ")[0];
+        this.invoking = message.getRawContent().split(" ")[0];
 
         if(!this.hasPermission())return;
 

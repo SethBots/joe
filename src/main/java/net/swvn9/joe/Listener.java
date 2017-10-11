@@ -36,7 +36,7 @@ public class Listener extends ListenerAdapter{
         if(!configChannel.cfg.keySet().contains(e.getGuild().getId())){
             if(null!=Bot.jda.getGuildById("341666084748787712").getMember(e.getAuthor())&&
                     Bot.jda.getGuildById("341666084748787712").getMember(e.getAuthor()).getRoles().contains(Bot.jda.getRoleById("341705215969460224"))){
-                if(e.getMessage().getMentionedUsers().contains(Bot.jda.getSelfUser())&&e.getMessage().getContentRaw().toLowerCase().contains("config")){
+                if(e.getMessage().getMentionedUsers().contains(Bot.jda.getSelfUser())&&e.getMessage().getRawContent().toLowerCase().contains("config")){
                     configChannel.putnew(e.getGuild().getId(),e.getGuild().getOwner().getUser().getId(),false);
                     System.out.println("added new guild");
                 } else {
@@ -53,17 +53,17 @@ public class Listener extends ListenerAdapter{
         String literal = "!";
         Boolean delete = true;
 
-        if(e.getMessage().getContentRaw().startsWith(literal)){
+        if(e.getMessage().getRawContent().startsWith(literal)){
             //Hard-Coded Commands
             try{
-                switch (e.getMessage().getContentRaw().toLowerCase().replaceFirst(literal,"").split(" ")[0]){
+                switch (e.getMessage().getRawContent().toLowerCase().replaceFirst(literal,"").split(" ")[0]){
 
                 }
             } catch(Exception ignored){
                 return;
             }
             try{
-                commandChannel.list.get(e.getMessage().getContentRaw().replaceFirst("(i?)"+literal,"").split(" ")[0]).run(e);
+                commandChannel.list.get(e.getMessage().getRawContent().replaceFirst("(i?)"+literal,"").split(" ")[0]).run(e);
             } catch (Exception ex){
                 if (!(ex instanceof NullPointerException)) {
                     e.getChannel().sendMessageFormat("```%s```",ex).queue(m->m.delete().queueAfter(10, TimeUnit.MINUTES));

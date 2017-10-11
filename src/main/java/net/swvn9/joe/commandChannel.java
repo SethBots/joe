@@ -32,9 +32,9 @@ public class commandChannel {
         commandMessages.addAll(jda.getGuildById("341666084748787712").getTextChannelById(channelID).getIterableHistory().complete());
         Pattern classname = Pattern.compile("^```?(\\w*)|```$");
         for(Message m:commandMessages){
-            Matcher matcher = classname.matcher(m.getContentRaw());
-            if(matcher.find()&&m.getContentRaw().startsWith("```")){
-                String loadString = m.getContentRaw().replaceAll(classname.toString(),"");
+            Matcher matcher = classname.matcher(m.getRawContent());
+            if(matcher.find()&&m.getRawContent().startsWith("```")){
+                String loadString = m.getRawContent().replaceAll(classname.toString(),"");
                 try{
 
                     if(loadString.toLowerCase().contains("token")) throw new Exception("Token cannot be revealed by an external command.");
@@ -68,11 +68,11 @@ public class commandChannel {
                         }
                     }
                     m.addReaction(jda.getEmoteById("338773212710305795")).queue();
-                    m.getAuthor().openPrivateChannel().queue(c->c.sendMessage("\n<:rt:338773212710305795> **Your command has failed to compile with the following exception:**\n```java\n"+e+"```\nI will attempt to re-compile the command the next time a change is made in <#341669410827796500>, or if you edit the existing command message in the channel.\n*For reference, here is the original content of your command:*\n"+m.getContentRaw()).queue());
+                    m.getAuthor().openPrivateChannel().queue(c->c.sendMessage("\n<:rt:338773212710305795> **Your command has failed to compile with the following exception:**\n```java\n"+e+"```\nI will attempt to re-compile the command the next time a change is made in <#341669410827796500>, or if you edit the existing command message in the channel.\n*For reference, here is the original content of your command:*\n"+m.getRawContent()).queue());
                     System.out.println("A command by "+m.getAuthor().getName()+" has failed to compile with the exception: "+e);
                 }
             } else {
-                if(!m.getContentRaw().startsWith("//")&&!m.isPinned()){
+                if(!m.getRawContent().startsWith("//")&&!m.isPinned()){
                     for(MessageReaction mr:m.getReactions()){
                         if(mr.getEmote().getEmote().equals(jda.getEmoteById("338773147849588740"))){
                             mr.removeReaction().queue();
